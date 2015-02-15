@@ -6,33 +6,37 @@ using UnityEngine.Events;
 public delegate void TouchEventHandler (object sender,TouchEventArgs e);
 public class TouchEventArgs:EventArgs
 {
-    public   Vector2 ScreenPosition;
+		public   Vector3 ScreenPosition;
 
-    public TouchEventArgs (float screenPositionX, float screenPositionY)
-    {
-        this.ScreenPosition = new Vector2 (screenPositionX, screenPositionY);
-    }
+		public TouchEventArgs (Vector3 screenPosition)
+		{
+				this.ScreenPosition = screenPosition;
+		}
 }
 public delegate void SwipeEventHandler (object sender,SwipeEventArgs e);
 public class SwipeEventArgs:EventArgs
 {
-    public    Vector2 MovedDistance;
+		public   Vector2 ScreenPosition;
+		public    Vector2 MovedScreenDistance;
 
-    public SwipeEventArgs (float movedX, float movedY)
-    {
-        this.MovedDistance = new Vector2 (movedX, movedY);
-    }
+		public SwipeEventArgs (Vector3 screenPosition, Vector3 movedScreenDistance)
+		{
+				this.ScreenPosition = screenPosition;
+				this.MovedScreenDistance = movedScreenDistance;
+		}
 }
 public delegate void FlickEventHandler (object sender,FlickEventArgs e);
 public class FlickEventArgs:EventArgs
 {
-    public Vector2 Distance;
-    public float Time;
+		public Vector3 FlickStartScreenPosition;
+		public Vector3 FlickEndScreenPosition;
+		public float ElapsedTime;
 
-    public FlickEventArgs (float distanceX, float distanceY, float time)
-    {
-        this.Distance = new Vector2 (distanceX, distanceY);
-        this.Time = time;
-    }
+		public FlickEventArgs (Vector3 flickStartScreenPosition, Vector3 flickEndScreenPosition, float elapsedTime)
+		{
+				this.FlickStartScreenPosition = flickStartScreenPosition;
+				this.FlickEndScreenPosition = flickEndScreenPosition;
+				this.ElapsedTime = elapsedTime;
+		}
 }
 
