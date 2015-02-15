@@ -31,3 +31,8 @@ Thumbs.db
 # -------------[ Build ]------------------------ #
 *.html
 *.unity3d
+
+# -------------[ Release ]------------------------ #
+iOSRelease/
+*.keystore
+*.apk
