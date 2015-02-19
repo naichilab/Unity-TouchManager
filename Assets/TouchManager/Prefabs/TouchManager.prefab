@@ -8,7 +8,10 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 447012}
-  - 114: {fileID: 11447012}
+  - 114: {fileID: 11448810}
+  - 114: {fileID: 11448804}
+  - 114: {fileID: 11448806}
+  - 114: {fileID: 11448808}
   m_Layer: 0
   m_Name: TouchManager
   m_TagString: Untagged
@@ -28,7 +31,45 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11447012
+--- !u!114 &11448804
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e479e77d3d5147bcbdb68359450bf5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Enabled: 1
+  LevelingFrameCount: 3
+  DetectAcceleration: 1000
+  DefeatSpeed: 100
+  MinFlickDistance: 0
+--- !u!114 &11448806
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62c6e9ff53c6c4922bd569b903e3179c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11448808
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eba50494cb2a4696a818eedaa9abfa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11448810
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -39,6 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c36263aaa51f44299222467462737cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugMode: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

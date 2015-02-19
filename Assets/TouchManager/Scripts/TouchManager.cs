@@ -3,65 +3,38 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent (typeof(TouchDetector))]
+[RequireComponent (typeof(DragDetector))]
+[RequireComponent (typeof(FlickDetector))]
 public class TouchManager :MonoBehaviour
 {
-		/// <summary>
-		/// タッチ開始イベント
-		/// </summary>
-		public event TouchEventHandler TouchStart;
-		/// <summary>
-		/// タッチ終了イベント
-		/// </summary>
-		public event TouchEventHandler TouchEnd;
-		/// <summary>
-		/// スワイプイベント
-		/// </summary>
-		public event SwipeEventHandler Swipe;
-		/// <summary>
-		/// フリックイベント
-		/// </summary>
-		public event FlickEventHandler Flick;
+		public event EventHandler<CustomInputEventArgs> TouchStart;
+		public event EventHandler<CustomInputEventArgs> TouchEnd;
+		public event EventHandler<CustomInputEventArgs> Drag;
+		public event EventHandler<FlickEventArgs> Flick;
 
-		/// <summary>
-		/// TouchStartイベントを発生させます。
-		/// </summary>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		private void OnTouchStart (Vector3 screenPosition)
+		public void OnTouchStart (CustomInput input)
 		{
 				if (this.TouchStart != null)
-						this.TouchStart (this, new TouchEventArgs (screenPosition));
+						this.TouchStart (this.gameObject, new CustomInputEventArgs (input));
 		}
 
-		/// <summary>
-		/// TouchEndイベントを発生させます。
-		/// </summary>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		private void OnTouchEnd (Vector3 screenPosition)
+		public void OnTouchEnd (CustomInput input)
 		{
 				if (this.TouchEnd != null)
-						this.TouchEnd (this, new TouchEventArgs (screenPosition));
+						this.TouchEnd (this.gameObject, new CustomInputEventArgs (input));
 		}
 
-		/// <summary>
-		/// Swipeイベントを発生させます。
-		/// </summary>
-		/// <param name="x">The x coordinate.</param>
-		/// <param name="y">The y coordinate.</param>
-		private void OnSwipe (Vector3 screenPosition, Vector3 movedScreenDistance)
+		public void OnDrag (CustomInput input)
 		{
-				if (this.Swipe != null)
-						this.Swipe (this, new SwipeEventArgs (screenPosition, movedScreenDistance));
+				if (this.Drag != null)
+						this.Drag (this.gameObject, new CustomInputEventArgs (input));
 		}
 
-		/// <summary>
-		/// Flickイベントを発生させます。
-		/// </summary>
-		private void OnFlick (Vector3 flickStartScreenPosition, Vector3 flickEndScreenPosition, float elapsedTime)
+		public void OnFlick (FlickEventArgs e)
 		{
 				if (this.Flick != null)
-						this.Flick (this, new FlickEventArgs (flickStartScreenPosition, flickEndScreenPosition, elapsedTime));
+						this.Flick (this.gameObject, e);
 		}
 
 		#region Singleton
@@ -72,10 +45,9 @@ public class TouchManager :MonoBehaviour
 				get {
 						if (instance == null) {
 								instance = (TouchManager)FindObjectOfType (typeof(TouchManager));
-								instance.MinFlickDistance = 50.0f;
 
 								if (instance == null) {
-										Debug.LogError (typeof(TouchManager) + "is nothing");
+										Debug.LogWarning (typeof(TouchManager) + "is nothing");
 								}
 						}
 						return instance;
@@ -84,27 +56,9 @@ public class TouchManager :MonoBehaviour
 
 		#endregion Singleton
 
-		private const int TRACE_QUEUE_COUNT = 20;
-
-		public float MinFlickDistance{ get; set; }
-
-		private  List<CustomInput> inputList = new List<CustomInput> ();
-
-		private CustomInput firstInput {
-				get {
-						if (this.inputList.Count == 0)
-								return null;
-						return this.inputList [0];
-				}
-		}
-
-		private CustomInput lastInput { 
-				get {
-						if (this.inputList.Count == 0)
-								return null;
-						return this.inputList [this.inputList.Count - 1];
-				}
-		}
+		private List<IGestureDetector> Detectors = new List<IGestureDetector> ();
+		private CustomInput lastInput = null;
+		public bool DebugMode = false;
 
 		private static bool IsTouchPlatform { 
 				get {
@@ -194,7 +148,7 @@ public class TouchManager :MonoBehaviour
 				}
 		}
 
-		public void Awake ()
+		private void Awake ()
 		{
 				if (this != Instance) {
 						Destroy (this);
@@ -203,39 +157,68 @@ public class TouchManager :MonoBehaviour
 				DontDestroyOnLoad (this.gameObject);
 		}
 
-		public void Update ()
+		private void Start ()
+		{
+				this.Detectors.Add (this.GetComponent<TouchDetector> ());
+				this.Detectors.Add (this.GetComponent<DragDetector> ());
+				this.Detectors.Add (this.GetComponent<FlickDetector> ());
+		}
+
+		private void Update ()
 		{
 				CustomInput currentInput = IsTouchPlatform ? InputOfTouch : InputOfMouse;
-        
-				this.inputList.Add (currentInput);
-				if (this.inputList.Count > TRACE_QUEUE_COUNT) { 
-						this.inputList.RemoveAt (0);
-				}
-        
-				if (currentInput.IsDown) {
-						this.OnTouchStart (currentInput.ScreenPosition);
-				}
-				if (currentInput.IsDrag) {
-						this.OnSwipe (currentInput.ScreenPosition, currentInput.DeltaPosition);
-				}
-				if (currentInput.IsUp) {
-						this.OnTouchEnd (currentInput.ScreenPosition);
 
-						// Flick判定
-						var v = this.lastInput.ScreenPosition - this.firstInput.ScreenPosition;
-						if (Mathf.Pow (MinFlickDistance, 2) < Mathf.Pow (v.x, 2) + Mathf.Pow (v.y, 2)) {
-								float t = 0f;
-								foreach (var input in inputList) {
-										t += input.DeltaTime;
-								}
-								this.OnFlick (this.firstInput.ScreenPosition, this.lastInput.ScreenPosition, t);
-						} else {
-								Debug.Log ("距離足りない" + v.ToString ());
-						}
-
-						this.inputList.Clear ();
+				foreach (var detector in this.Detectors) {
+						detector.Enqueue (currentInput);
 				}
+
+				this.lastInput = currentInput;
 		}
+
+		public void OnGUI ()
+		{
+				if (!this.DebugMode)
+						return;
+				CustomInput input = this.lastInput;
+				if (input == null) {
+						input = new CustomInput ();
+				}
+
+				int i = 0;
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("ScreenPosition : X:{0} Y:{1}", input.ScreenPosition.x.ToString ("0"), input.ScreenPosition.y.ToString ("0")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("DeltaPosition : X:{0} Y:{1}", input.DeltaPosition.x.ToString ("0"), input.DeltaPosition.y.ToString ("0")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("DeltaTime : {0}sec", input.DeltaTime.ToString ("0.000")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("Time : {0}sec", input.Time.ToString ("0.000")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("IsDown : {0}", input.IsDown.ToString ()));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("IsUp : {0}", input.IsUp.ToString ()));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("IsDrag : {0}", input.IsDrag.ToString ()));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("IsFlicking : {0}", input.IsFlicking.ToString ()));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("TouchID : {0}", input.TouchId));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("", ""));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("LevelingTime : {0}sec", input.LevelingTime.ToString ("0.000")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("MovedDistance : {0}", input.MovedDistance.magnitude));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("SpeedVector : X:{0} Y:{1}", input.SpeedVector.x.ToString ("0"), input.SpeedVector.y.ToString ("0")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("LevelingOriginSpeedVector : X:{0} Y:{1}", input.LevelingOriginSpeedVector.x.ToString ("0"), input.LevelingOriginSpeedVector.y.ToString ("0")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("AccelerationVector : X:{0} Y:{1}", input.AccelerationVector.x.ToString ("0"), input.AccelerationVector.y.ToString ("0")));
+
+
+		}
+		//
+		//		/// <summary>
+		//		/// LevelingTime前のフレームの速度ベクトル
+		//		/// </summary>
+		//		public Vector3 LevelingOriginSpeedVector{ get; set; }
+		//
+		//		/// <summary>
+		//		/// このフレームの直近LevelingTimeでの加速度ベクトル
+		//		/// </summary>
+		//		public Vector3 AccelerationVector {
+		//				get {
+		//						if (this.LevelingTime < 0.0001f)
+		//								return Vector3.zero;
+		//						return (this.SpeedVector - this.LevelingOriginSpeedVector) / this.LevelingTime;
+		//				}
+		//		}
 }
 
 
