@@ -8,10 +8,14 @@ Unity-TouchManager
 * 扱える操作
     * タッチ開始（マウスクリックを開始）
     * タッチ終了（マウスクリックを離す）
-    * スワイプ（マウスドラッグ）
+    * ドラッグ（スワイプ）
+    * フリック開始（マウスドラッグ開始）
     * フリック（マウスドラッグしながら離す）
 
 ## デモ
+
+## インストール
+1. TouchManager.unitypackageをインポート
 
 ## 使用方法
 1. TouchManager.prefabをシーンに配置
@@ -120,10 +124,6 @@ void OnFlickComplete (object sender, FlickEventArgs e)
 
 
 
-## インストール
-1. TouchManager.unitypackageをインポート
-
-以上
 
 ## Contribution
 
