@@ -1,8 +1,8 @@
-# Unity-TouchManager
+Unity-TouchManager
+====
 
-Unityでマウス/タッチによる操作を一元管理するアセット（になる予定）
+マウス/タッチ操作による一般的なジェスチャーをシンプルなコードで利用可能にするアセット（になる予定）
 
-## 機能
 * WebPlayerでのマウス操作およびiPhone,Androidでのタッチ操作を等しく扱えます。
 * タッチ操作はシングルタッチのみ対応（必要になったらマルチタッチ対応します）
 * 扱える操作
@@ -11,9 +11,23 @@ Unityでマウス/タッチによる操作を一元管理するアセット（�
     * スワイプ（マウスドラッグ）
     * フリック（マウスドラッグしながら離す）
 
-## 注意
-* タッチ操作はシングルタッチのみ対応
-* 端末サイズによるフリック感度の吸収等は未対応
+## デモ
 
-## ライセンス
+## 使用方法
+
+## インストール
+
+## Contribution
+
+1. Fork it ( https://github.com/naichilab/Unity-TouchManager/fork )
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
+
+## Licence
 This software is released under the MIT License, see LICENSE.txt.
+[MIT](https://github.com/naichilab/Unity-TouchManager/blob/master/LICENSE)
+
+## 作者
+[@naichilab](https://github.com/naichilab)
