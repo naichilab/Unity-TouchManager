@@ -59,13 +59,13 @@ void OnTouchEnd (object sender, CustomInputEventArgs e)
 ```csharp
 void OnEnable ()
 {
-		TouchManager.Instance.Drag += OnSwipe;
+		TouchManager.Instance.Drag += OnDrag;
 }
 void OnDisable ()
 {
-		TouchManager.Instance.Drag -= OnSwipe;
+		TouchManager.Instance.Drag -= OnDrag;
 }
-void OnSwipe (object sender, CustomInputEventArgs e)
+void OnDrag (object sender, CustomInputEventArgs e)
 {
 		string text = string.Format ("OnSwipe Pos[{0},{1}] Move[{2},{3}]", new object[] {
 				e.Input.ScreenPosition.x.ToString ("0"),
