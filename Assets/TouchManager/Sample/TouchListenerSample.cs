@@ -13,7 +13,8 @@ public class TouchListenerSample : MonoBehaviour
 				TouchManager.Instance.Drag += OnSwipe;
 				TouchManager.Instance.TouchStart += OnTouchStart;
 				TouchManager.Instance.TouchEnd += OnTouchEnd;
-				TouchManager.Instance.Flick += OnFlick;
+				TouchManager.Instance.FlickStart += OnFlickStart;
+				TouchManager.Instance.FlickComplete += OnFlickComplete;
 		}
 
 		void OnDisable ()
@@ -22,7 +23,8 @@ public class TouchListenerSample : MonoBehaviour
 						TouchManager.Instance.Drag -= OnSwipe;
 						TouchManager.Instance.TouchStart -= OnTouchStart;
 						TouchManager.Instance.TouchEnd -= OnTouchEnd;
-						TouchManager.Instance.Flick -= OnFlick;
+						TouchManager.Instance.FlickStart -= OnFlickStart;
+						TouchManager.Instance.FlickComplete -= OnFlickComplete;
 				}
 		}
 
@@ -46,12 +48,22 @@ public class TouchListenerSample : MonoBehaviour
 						e.Input.ScreenPosition.y,
 						e.Input.DeltaPosition.y
 				});
+		}
+
+		void OnFlickStart (object sender, FlickEventArgs e)
+		{
+				string text = string.Format ("OnFlickStart Speed[{0}] Accel[{3}] Direction[{1}] Time[{2}]", new object[] {
+						e.Speed.ToString (),
+						e.Direction.ToString (),
+						e.ElapsedTime,
+						(e.EndInput.SpeedVector - e.StartInput.SpeedVector).magnitude
+				});
 				Debug.Log (text);
 		}
 
-		void OnFlick (object sender, FlickEventArgs e)
+		void OnFlickComplete (object sender, FlickEventArgs e)
 		{
-				string text = string.Format ("OnFlick Speed[{0}] Direction[{1}] Time[{2}]", new object[] {
+				string text = string.Format ("OnFlickComplete Speed[{0}] Direction[{1}] Time[{2}]", new object[] {
 						e.Speed.ToString (),
 						e.Direction.ToString (),
 						e.ElapsedTime

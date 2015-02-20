@@ -11,7 +11,8 @@ public class TouchManager :MonoBehaviour
 		public event EventHandler<CustomInputEventArgs> TouchStart;
 		public event EventHandler<CustomInputEventArgs> TouchEnd;
 		public event EventHandler<CustomInputEventArgs> Drag;
-		public event EventHandler<FlickEventArgs> Flick;
+		public event EventHandler<FlickEventArgs> FlickComplete;
+		public event EventHandler<FlickEventArgs> FlickStart;
 
 		public void OnTouchStart (CustomInput input)
 		{
@@ -31,10 +32,16 @@ public class TouchManager :MonoBehaviour
 						this.Drag (this.gameObject, new CustomInputEventArgs (input));
 		}
 
-		public void OnFlick (FlickEventArgs e)
+		public void OnFlickComplete (FlickEventArgs e)
 		{
-				if (this.Flick != null)
-						this.Flick (this.gameObject, e);
+				if (this.FlickComplete != null)
+						this.FlickComplete (this.gameObject, e);
+		}
+
+		public void OnFlickStart (FlickEventArgs e)
+		{
+				if (this.FlickStart != null)
+						this.FlickStart (this.gameObject, e);
 		}
 
 		#region Singleton
@@ -197,28 +204,12 @@ public class TouchManager :MonoBehaviour
 				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("", ""));
 				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("LevelingTime : {0}sec", input.LevelingTime.ToString ("0.000")));
 				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("MovedDistance : {0}", input.MovedDistance.magnitude));
-				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("SpeedVector : X:{0} Y:{1}", input.SpeedVector.x.ToString ("0"), input.SpeedVector.y.ToString ("0")));
-				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("LevelingOriginSpeedVector : X:{0} Y:{1}", input.LevelingOriginSpeedVector.x.ToString ("0"), input.LevelingOriginSpeedVector.y.ToString ("0")));
-				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("AccelerationVector : X:{0} Y:{1}", input.AccelerationVector.x.ToString ("0"), input.AccelerationVector.y.ToString ("0")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("Speed : {0} [X:{1},Y:{2}]", input.SpeedVector.magnitude, input.SpeedVector.x.ToString ("0"), input.SpeedVector.y.ToString ("0")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("LevelingOriginSpeed : {0} [X:{1},Y:{2}]", input.LevelingOriginSpeedVector.magnitude, input.LevelingOriginSpeedVector.x.ToString ("0"), input.LevelingOriginSpeedVector.y.ToString ("0")));
+				GUI.Label (new Rect (20, 20 + i++ * 20, 400, 20), string.Format ("Acceleration : {0} [X:{1},Y:{2}]", input.AccelerationVector.magnitude, input.AccelerationVector.x.ToString ("0"), input.AccelerationVector.y.ToString ("0")));
 
 
 		}
-		//
-		//		/// <summary>
-		//		/// LevelingTime前のフレームの速度ベクトル
-		//		/// </summary>
-		//		public Vector3 LevelingOriginSpeedVector{ get; set; }
-		//
-		//		/// <summary>
-		//		/// このフレームの直近LevelingTimeでの加速度ベクトル
-		//		/// </summary>
-		//		public Vector3 AccelerationVector {
-		//				get {
-		//						if (this.LevelingTime < 0.0001f)
-		//								return Vector3.zero;
-		//						return (this.SpeedVector - this.LevelingOriginSpeedVector) / this.LevelingTime;
-		//				}
-		//		}
 }
 
 
