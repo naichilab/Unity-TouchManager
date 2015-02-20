@@ -44,7 +44,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Enabled: 1
   LevelingFrameCount: 3
-  DetectAcceleration: 1000
+  DetectAcceleration: 10000
   DefeatSpeed: 100
   MinFlickDistance: 0
 --- !u!114 &11448806

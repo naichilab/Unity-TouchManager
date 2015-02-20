@@ -14,11 +14,11 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 		/// </summary>
 		[Range (1f, 60f)]
 		public int LevelingFrameCount = 5;
-		[Range (1f, 10000f)]
+		[Range (1f, 100000f)]
 		public float DetectAcceleration = 1000f;
 		[Range (1f, 10000f)]
 		public float DefeatSpeed = 100f;
-		[Range (0f, 100f)]
+		[Range (0f, 1000f)]
 		public float MinFlickDistance = 0f;
 		/// <summary>
 		/// 過去LevelingFrameCount分のInputを保持
@@ -57,6 +57,9 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 								} else {
 										//フリック中止
 										this.FlickStartInput = null;
+
+										currentInput.IsFlicking = false;
+										this.FlickStartInput = null;
 								}
 						} else {
 								//フリック開始判定
@@ -64,6 +67,9 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 										if (currentInput.SpeedVector.magnitude > 0.0001f) {
 												currentInput.IsFlicking = true;
 												this.FlickStartInput = currentInput;
+
+												//フリック開始イベント
+												TouchManager.Instance.OnFlickStart (new FlickEventArgs (levelingOriginInput, currentInput));
 										}
 								}
 						}
@@ -71,12 +77,10 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 						//フリック完了判定
 						if (currentInput.IsFlicking && currentInput.IsUp) {
 
-								//若干の誤差あり
-								//this.FlickStartInputが数フレーム分おくれて検出されるので。
 								Vector3 flickDistance = currentInput.ScreenPosition - this.FlickStartInput.ScreenPosition;
 								if (flickDistance.magnitude > this.MinFlickDistance) {
 										//フリック成立
-										TouchManager.Instance.OnFlick (new FlickEventArgs (this.FlickStartInput, currentInput));
+										TouchManager.Instance.OnFlickComplete (new FlickEventArgs (this.FlickStartInput, currentInput));
 
 										currentInput.IsFlicking = false;
 										this.FlickStartInput = null;
