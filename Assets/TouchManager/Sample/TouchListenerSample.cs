@@ -42,31 +42,33 @@ public class TouchListenerSample : MonoBehaviour
 
 		void OnSwipe (object sender, CustomInputEventArgs e)
 		{
-				string text = string.Format ("OnSwipe X={0}[{1}] Y={2}[{3}]", new object[] {
-						e.Input.ScreenPosition.x,
-						e.Input.DeltaPosition.x,
-						e.Input.ScreenPosition.y,
-						e.Input.DeltaPosition.y
+				string text = string.Format ("OnSwipe Pos[{0},{1}] Move[{2},{3}]", new object[] {
+						e.Input.ScreenPosition.x.ToString ("0"),
+						e.Input.ScreenPosition.y.ToString ("0"),
+						e.Input.DeltaPosition.x.ToString ("0"),
+						e.Input.DeltaPosition.y.ToString ("0")
 				});
+				//Debug.Log (text);
 		}
 
 		void OnFlickStart (object sender, FlickEventArgs e)
 		{
-				string text = string.Format ("OnFlickStart Speed[{0}] Accel[{3}] Direction[{1}] Time[{2}]", new object[] {
-						e.Speed.ToString (),
+				string text = string.Format ("OnFlickStart [{0}] Speed[{1}] Accel[{2}] ElapseTime[{3}]", new object[] {
 						e.Direction.ToString (),
-						e.ElapsedTime,
-						(e.EndInput.SpeedVector - e.StartInput.SpeedVector).magnitude
+						e.Speed.ToString ("0.000"),
+						e.Acceleration.ToString ("0.000"),
+						e.ElapsedTime.ToString ("0.000"),
 				});
 				Debug.Log (text);
 		}
 
 		void OnFlickComplete (object sender, FlickEventArgs e)
 		{
-				string text = string.Format ("OnFlickComplete Speed[{0}] Direction[{1}] Time[{2}]", new object[] {
-						e.Speed.ToString (),
+				string text = string.Format ("OnFlickComplete [{0}] Speed[{1}] Accel[{2}] ElapseTime[{3}]", new object[] {
 						e.Direction.ToString (),
-						e.ElapsedTime
+						e.Speed.ToString ("0.000"),
+						e.Acceleration.ToString ("0.000"),
+						e.ElapsedTime.ToString ("0.000")
 				});
 				Debug.Log (text);
 		}

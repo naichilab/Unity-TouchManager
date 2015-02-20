@@ -7,9 +7,9 @@ public class FlickEventArgs : EventArgs
 		public enum Direction4
 		{
 				None = -1,
-				Top = 0,
+				Up = 0,
 				Left = 1,
-				Bottom = 2,
+				Down = 2,
 				Right = 3
 		}
 
@@ -31,6 +31,14 @@ public class FlickEventArgs : EventArgs
 
 		public Direction4 Direction{ get { return VectorDirection4 (this.MovedDistance.x, this.MovedDistance.y); } }
 
+		public float Acceleration {
+				get {
+						if (this.ElapsedTime < 0.0001f)
+								return 0;
+						return (this.EndInput.AccelerationVector - this.StartInput.AccelerationVector).magnitude / this.ElapsedTime;
+				}
+		}
+
 		public FlickEventArgs (CustomInput startInput, CustomInput endInput)
 		{
 				this.StartInput = startInput;
@@ -43,9 +51,9 @@ public class FlickEventArgs : EventArgs
 						return Direction4.None;
 
 				if (y >= Mathf.Abs (x))
-						return Direction4.Top;
+						return Direction4.Up;
 				if (y <= -Mathf.Abs (x))
-						return Direction4.Bottom;
+						return Direction4.Down;
 
 				if (x < -Mathf.Abs (y))
 						return Direction4.Left;
