@@ -14,8 +14,116 @@ Unity-TouchManager
 ## デモ
 
 ## 使用方法
+1. TouchManager.prefabをシーンに配置
+2. タッチイベントを受け取りたいスクリプト上で下記を記述
+
+下記ソースは TouchListener.prefab にサンプルとして書かれています。
+
+### タッチ開始を取得
+```csharp
+void OnEnable ()
+{
+		TouchManager.Instance.TouchStart += OnTouchStart;
+}
+void OnDisable ()
+{
+		TouchManager.Instance.TouchStart -= OnTouchStart;
+}
+void OnTouchStart (object sender, CustomInputEventArgs e)
+{
+		string text = string.Format ("OnTouchStart X={0} Y={1}", e.Input.ScreenPosition.x, e.Input.ScreenPosition.y);
+		Debug.Log (text);
+}
+```
+### タッチ終了を取得
+```csharp
+void OnEnable ()
+{
+		TouchManager.Instance.TouchEnd += OnTouchEnd;
+}
+void OnDisable ()
+{
+		TouchManager.Instance.TouchEnd -= OnTouchEnd;
+}
+void OnTouchEnd (object sender, CustomInputEventArgs e)
+{
+		string text = string.Format ("OnTouchEnd X={0} Y={1}", e.Input.ScreenPosition.x, e.Input.ScreenPosition.y);
+		Debug.Log (text);
+}
+```
+### ドラッグを取得
+```csharp
+void OnEnable ()
+{
+		TouchManager.Instance.Drag += OnSwipe;
+}
+void OnDisable ()
+{
+		TouchManager.Instance.Drag -= OnSwipe;
+}
+void OnSwipe (object sender, CustomInputEventArgs e)
+{
+		string text = string.Format ("OnSwipe Pos[{0},{1}] Move[{2},{3}]", new object[] {
+				e.Input.ScreenPosition.x.ToString ("0"),
+				e.Input.ScreenPosition.y.ToString ("0"),
+				e.Input.DeltaPosition.x.ToString ("0"),
+				e.Input.DeltaPosition.y.ToString ("0")
+		});
+		Debug.Log (text);
+}
+```
+### フリック開始を取得
+```csharp
+void OnEnable ()
+{
+		TouchManager.Instance.FlickStart += OnFlickStart;
+}
+void OnDisable ()
+{
+		TouchManager.Instance.FlickStart -= OnFlickStart;
+}
+void OnFlickStart (object sender, FlickEventArgs e)
+{
+		string text = string.Format ("OnFlickStart [{0}] Speed[{1}] Accel[{2}] ElapseTime[{3}]", new object[] {
+				e.Direction.ToString (),
+				e.Speed.ToString ("0.000"),
+				e.Acceleration.ToString ("0.000"),
+				e.ElapsedTime.ToString ("0.000"),
+		});
+		Debug.Log (text);
+}
+```
+### フリックを取得
+```csharp
+void OnEnable ()
+{
+		TouchManager.Instance.FlickComplete += OnFlickComplete;
+}
+void OnDisable ()
+{
+		TouchManager.Instance.FlickComplete -= OnFlickComplete;
+}
+void OnFlickComplete (object sender, FlickEventArgs e)
+{
+		string text = string.Format ("OnFlickComplete [{0}] Speed[{1}] Accel[{2}] ElapseTime[{3}]", new object[] {
+				e.Direction.ToString (),
+				e.Speed.ToString ("0.000"),
+				e.Acceleration.ToString ("0.000"),
+				e.ElapsedTime.ToString ("0.000")
+		});
+		Debug.Log (text);
+}
+```
+
+
+
+
+
 
 ## インストール
+1. TouchManager.unitypackageをインポート
+
+以上
 
 ## Contribution
 
