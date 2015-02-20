@@ -21,6 +21,11 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 		[Range (0f, 1000f)]
 		public float MinFlickDistance = 0f;
 		/// <summary>
+		/// 指を離さなくても連続で検知するか
+		/// </summary>
+		/// <value><c>true</c> if continuous detect; otherwise, <c>false</c>.</value>
+		public bool ContinuousDetect = false;
+		/// <summary>
 		/// 過去LevelingFrameCount分のInputを保持
 		/// </summary>
 		private  List<CustomInput> pastInputs = new List<CustomInput> ();
@@ -28,6 +33,7 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 		/// フリック開始時のInput
 		/// </summary>
 		public CustomInput FlickStartInput = null;
+		private bool IsDetected = false;
 
 		public void Enqueue (CustomInput currentInput)
 		{
@@ -65,11 +71,15 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 								//フリック開始判定
 								if (currentInput.AccelerationVector.magnitude > this.DetectAcceleration) {
 										if (currentInput.SpeedVector.magnitude > 0.0001f) {
-												currentInput.IsFlicking = true;
-												this.FlickStartInput = currentInput;
-
-												//フリック開始イベント
-												TouchManager.Instance.OnFlickStart (new FlickEventArgs (levelingOriginInput, currentInput));
+												if (!this.ContinuousDetect && this.IsDetected) {
+														//指を離すまで再検知しない
+												} else {
+														currentInput.IsFlicking = true;
+														this.FlickStartInput = currentInput;
+														this.IsDetected = true;
+														//フリック開始イベント
+														TouchManager.Instance.OnFlickStart (new FlickEventArgs (levelingOriginInput, currentInput));
+												}
 										}
 								}
 						}
@@ -85,6 +95,11 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 										currentInput.IsFlicking = false;
 										this.FlickStartInput = null;
 								}
+						}
+
+						//指が離れた
+						if (currentInput.IsUp) {
+								this.IsDetected = false;
 						}
 				}
 

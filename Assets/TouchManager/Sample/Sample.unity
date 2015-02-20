@@ -243,6 +243,7 @@ MonoBehaviour:
   DetectAcceleration: 10000
   DefeatSpeed: 100
   MinFlickDistance: 0
+  ContinuousDetect: 0
 --- !u!1 &1530592090
 GameObject:
   m_ObjectHideFlags: 0
