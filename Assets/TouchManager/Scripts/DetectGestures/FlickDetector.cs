@@ -24,7 +24,7 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 		/// 指を離さなくても連続で検知するか
 		/// </summary>
 		/// <value><c>true</c> if continuous detect; otherwise, <c>false</c>.</value>
-		public bool ContinuousDetect = false;
+		public bool ContinuousDetect = true;
 		/// <summary>
 		/// 過去LevelingFrameCount分のInputを保持
 		/// </summary>
@@ -89,11 +89,14 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 
 								Vector3 flickDistance = currentInput.ScreenPosition - this.FlickStartInput.ScreenPosition;
 								if (flickDistance.magnitude > this.MinFlickDistance) {
+
 										//フリック成立
-										TouchManager.Instance.OnFlickComplete (new FlickEventArgs (this.FlickStartInput, currentInput));
+										TouchManager.Instance.OnFlickComplete (new FlickEventArgs (this.pastInputs [this.pastInputs.Count - 2], currentInput));
+										//TouchManager.Instance.OnFlickComplete (new FlickEventArgs (this.FlickStartInput, currentInput));
 
 										currentInput.IsFlicking = false;
 										this.FlickStartInput = null;
+
 								}
 						}
 

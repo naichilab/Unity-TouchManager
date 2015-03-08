@@ -2,11 +2,13 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class TouchListenerSample : MonoBehaviour
 {
 		private List<string> logs = new List<string> ();
 		const int MAX_LOGS = 30;
+		public Circle circle;
 
 		void OnEnable ()
 		{
@@ -32,12 +34,17 @@ public class TouchListenerSample : MonoBehaviour
 		{
 				string text = string.Format ("OnTouchStart X={0} Y={1}", e.Input.ScreenPosition.x, e.Input.ScreenPosition.y);
 				Debug.Log (text);
+
+				this.circle.Speed = Vector3.zero;
+				this.circle.SetPosition (e.Input.ScreenPosition);
 		}
 
 		void OnTouchEnd (object sender, CustomInputEventArgs e)
 		{
 				string text = string.Format ("OnTouchEnd X={0} Y={1}", e.Input.ScreenPosition.x, e.Input.ScreenPosition.y);
 				Debug.Log (text);
+
+				this.circle.Speed = Vector3.zero;
 		}
 
 		void OnSwipe (object sender, CustomInputEventArgs e)
@@ -48,7 +55,8 @@ public class TouchListenerSample : MonoBehaviour
 						e.Input.DeltaPosition.x.ToString ("0"),
 						e.Input.DeltaPosition.y.ToString ("0")
 				});
-				//Debug.Log (text);
+
+				this.circle.MovePosition (e.Input.DeltaPosition);
 		}
 
 		void OnFlickStart (object sender, FlickEventArgs e)
@@ -71,5 +79,8 @@ public class TouchListenerSample : MonoBehaviour
 						e.ElapsedTime.ToString ("0.000")
 				});
 				Debug.Log (text);
+
+				this.circle.Speed = (e.MovedDistance / e.ElapsedTime);
+
 		}
 }
