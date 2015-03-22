@@ -79,6 +79,9 @@ public class TouchListenerSample : MonoBehaviour
 						e.ElapsedTime.ToString ("0.000")
 				});
 				Debug.Log (text);
+				text = string.Format ("[{0}]->[{1}]", new object[]{ e.StartInput.ScreenPosition, e.EndInput.ScreenPosition });
+				Debug.Log (text);
+
 
 				this.circle.Speed = (e.MovedDistance / e.ElapsedTime);
 
