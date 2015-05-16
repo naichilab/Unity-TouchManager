@@ -103,6 +103,7 @@ public class FlickDetector : MonoBehaviour,IGestureDetector
 						//指が離れた
 						if (currentInput.IsUp) {
 								this.IsDetected = false;
+								this.pastInputs.Clear();
 						}
 				}
 
