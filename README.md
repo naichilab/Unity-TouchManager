@@ -25,7 +25,7 @@ Unity-TouchManager
 
 ### モジュールの読み込み
 ```csharp
-using naichilab
+using naichilab.InputEvents;
 ```
 
 ### タッチ開始を取得
