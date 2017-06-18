@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DragDetector : MonoBehaviour,IGestureDetector
+namespace naichilab
 {
-		public void Enqueue (CustomInput currentInput)
+		public class DragDetector : MonoBehaviour,IGestureDetector
 		{
-				if (currentInput.IsDrag) {
-						TouchManager.Instance.OnDrag (currentInput);
+				public void Enqueue (CustomInput currentInput)
+				{
+						if (currentInput.IsDrag) {
+								TouchManager.Instance.OnDrag (currentInput);
+						}
 				}
 		}
 }

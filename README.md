@@ -23,6 +23,11 @@ Unity-TouchManager
 
 下記ソースは TouchListener.prefab にサンプルとして書かれています。
 
+### モジュールの読み込み
+```csharp
+using naichilab
+```
+
 ### タッチ開始を取得
 ```csharp
 void OnEnable ()

@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public interface IGestureDetector
+namespace naichilab
 {
-		void Enqueue (CustomInput currentInput);
+		public interface IGestureDetector
+		{
+				void Enqueue (CustomInput currentInput);
+		}
 }

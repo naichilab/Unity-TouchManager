@@ -3,6 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using naichilab;
 
 public class TouchListenerSample : MonoBehaviour
 {
