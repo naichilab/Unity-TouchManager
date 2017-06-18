@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace naichilab
+namespace naichilab.InputEvents
 {
 		public class FlickDetector : MonoBehaviour,IGestureDetector
 		{

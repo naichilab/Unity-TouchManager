@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace naichilab
+namespace naichilab.InputEvents
 {
 		[RequireComponent (typeof(TouchDetector))]
 		[RequireComponent (typeof(DragDetector))]

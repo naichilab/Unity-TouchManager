@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace naichilab
+namespace naichilab.InputEvents
 {
 		public class FlickEventArgs : EventArgs
 		{

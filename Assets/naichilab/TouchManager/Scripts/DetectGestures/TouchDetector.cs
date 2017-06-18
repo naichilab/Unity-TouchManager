@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace naichilab
+namespace naichilab.InputEvents
 {
 		public class TouchDetector : MonoBehaviour,IGestureDetector
 		{
