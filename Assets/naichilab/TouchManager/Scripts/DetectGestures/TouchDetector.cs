@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TouchDetector : MonoBehaviour,IGestureDetector
+namespace naichilab.InputEvents
 {
-		public void Enqueue (CustomInput currentInput)
+		public class TouchDetector : MonoBehaviour,IGestureDetector
 		{
-				if (currentInput.IsDown) {
-						TouchManager.Instance.OnTouchStart (currentInput);
-				}
-				if (currentInput.IsUp) {
-						TouchManager.Instance.OnTouchEnd (currentInput);
+				public void Enqueue (CustomInput currentInput)
+				{
+						if (currentInput.IsDown) {
+								TouchManager.Instance.OnTouchStart (currentInput);
+						}
+						if (currentInput.IsUp) {
+								TouchManager.Instance.OnTouchEnd (currentInput);
+						}
 				}
 		}
 }

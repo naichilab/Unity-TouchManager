@@ -2,12 +2,15 @@
 using System.Collections;
 using System;
 
-public class CustomInputEventArgs : EventArgs
+namespace naichilab.InputEvents
 {
-		public CustomInput Input{ get; private set; }
-
-		public CustomInputEventArgs (CustomInput input)
+		public class CustomInputEventArgs : EventArgs
 		{
-				this.Input = input;
+				public CustomInput Input{ get; private set; }
+
+				public CustomInputEventArgs (CustomInput input)
+				{
+						this.Input = input;
+				}
 		}
 }
