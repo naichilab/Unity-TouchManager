@@ -56,7 +56,7 @@ public class TouchListenerSample : MonoBehaviour
 						e.Input.DeltaPosition.x.ToString ("0"),
 						e.Input.DeltaPosition.y.ToString ("0")
 				});
-
+				Debug.Log (text);
 				this.circle.MovePosition (e.Input.DeltaPosition);
 		}
 
